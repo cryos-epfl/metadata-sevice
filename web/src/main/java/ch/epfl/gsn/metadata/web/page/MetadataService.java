@@ -4,9 +4,10 @@ import ch.epfl.gsn.metadata.core.model.VirtualSensorMetadata;
 import ch.epfl.gsn.metadata.core.model.exchange.ExchangeMetadata;
 import ch.epfl.gsn.metadata.core.repositories.ExchangeMetadataRepository;
 import ch.epfl.gsn.metadata.core.repositories.VirtualSensorMetadataRepository;
-import ch.epfl.gsn.oai.impl.DifConverter;
-import ch.epfl.gsn.oai.model.OaiRecordRepository;
-import ch.epfl.gsn.oai.model.OsperRecord;
+
+import ch.epfl.osper.oai.impl.DifConverter;
+import ch.epfl.osper.oai.model.OaiRecordRepository;
+import ch.epfl.osper.oai.model.OsperRecord;
 import com.google.common.collect.Maps;
 import com.google.gson.Gson;
 import org.json.JSONObject;

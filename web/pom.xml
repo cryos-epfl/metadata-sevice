@@ -43,8 +43,8 @@
         </dependency>
 
         <dependency>
-            <groupId>ch.epfl.gsn.oai</groupId>
-            <artifactId>oai-pmh-swissex</artifactId>
+            <groupId>ch.epfl.osper.oai</groupId>
+            <artifactId>oai-pmh-osper</artifactId>
             <version>0.1.0</version>
             <exclusions>
                 <exclusion>

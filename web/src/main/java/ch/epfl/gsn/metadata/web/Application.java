@@ -1,7 +1,7 @@
 package ch.epfl.gsn.metadata.web;
 
 import ch.epfl.gsn.metadata.mongodb.MongoApplicationConfig;
-import ch.epfl.gsn.oai.OaiConfigurationImpl;
+import ch.epfl.osper.oai.OaiConfigurationImpl;
 import org.springframework.beans.factory.config.PropertiesFactoryBean;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
