@@ -65,6 +65,6 @@ public class DifConverter implements Converter<OsperRecord> {
 
     @Override
     public boolean canConvertRecord(OsperRecord record) {
-        return true;
+        return record != null;
     }
 }

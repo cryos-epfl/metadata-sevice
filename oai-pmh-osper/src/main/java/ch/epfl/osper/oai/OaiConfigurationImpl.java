@@ -1,9 +1,7 @@
 package ch.epfl.osper.oai;
 
 import ch.epfl.gsn.metadata.mongodb.MongoApplicationConfig;
-import ch.epfl.osper.oai.impl.DcOaiFormat;
-import ch.epfl.osper.oai.impl.DifConverter;
-import ch.epfl.osper.oai.impl.DifFormat;
+import ch.epfl.osper.oai.impl.*;
 import ch.epfl.osper.oai.interfaces.Converter;
 import ch.epfl.osper.oai.interfaces.MetadataFormat;
 import ch.epfl.osper.oai.interfaces.OaiConfiguration;
@@ -27,21 +25,42 @@ import java.util.Set;
 public class OaiConfigurationImpl implements OaiConfiguration {
 
     @Autowired
-    private DifConverter recordConverter;
-
+    private DifConverter difConverter;
 
     @Autowired
     private DifFormat difFormat;
 
     @Autowired
+    private Iso1Format iso1Format;
+    @Autowired
+    private Iso2Format iso2Format;
+    @Autowired
+    private Iso1Converter iso1Converter;
+    @Autowired
+    private Iso2Converter iso2Converter;
+
+    @Autowired
     private DcOaiFormat dcOaiFormat;
 
+    private Set<Converter> converters = Sets.newHashSet();
+
+    private Set<MetadataFormat> formats = Sets.newHashSet();
+
+    public OaiConfigurationImpl() {
+        converters.add(difConverter);
+        converters.add(iso1Converter);
+        converters.add(iso2Converter);
+
+        formats.add(difFormat);
+        formats.add(dcOaiFormat);
+        formats.add(iso1Format);
+        formats.add(iso2Format);
+
+    }
 
     @Override
     @Bean
     public Set<Converter> converters() {
-        Set<Converter> converters = Sets.newHashSet();
-        converters.add(recordConverter);
 
         return converters;
     }
@@ -49,9 +68,6 @@ public class OaiConfigurationImpl implements OaiConfiguration {
     @Override
     @Bean
     public Set<MetadataFormat> formats() {
-        Set<MetadataFormat> formats = Sets.newHashSet();
-        formats.add(difFormat);
-        formats.add(dcOaiFormat);
         return formats;
     }
 }
