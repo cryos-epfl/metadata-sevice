@@ -1,7 +1,7 @@
 #!/bin/bash
 
 DIR=$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )
-LOG="../logs/web.log"
+LOG="logs/web.log"
 
 log=${1:-$LOG}
 cd $DIR
