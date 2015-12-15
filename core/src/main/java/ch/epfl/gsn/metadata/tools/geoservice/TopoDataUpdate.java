@@ -35,7 +35,7 @@ public class TopoDataUpdate {
                 continue;
             }
 
-            if (sensor.getGeoData() != null) {
+            if (sensor.getGeoData() != null && !sensor.getGeoData().isEmpty()) {
                 continue;
             }
 

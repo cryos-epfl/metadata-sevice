@@ -26,4 +26,8 @@ public class GeoData {
     public double getAspect() {
         return aspect;
     }
+
+    public boolean isEmpty() {
+        return this.elevation == 0 && this.slope == 0 && this.aspect == 0;
+    }
 }
