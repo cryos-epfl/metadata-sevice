@@ -14,7 +14,7 @@ import org.springframework.data.mongodb.repository.config.EnableMongoRepositorie
  * Created by kryvych on 08/01/15.
  */
 @Configuration
-@EnableMongoRepositories(basePackages = "ch.epfl.gsn.metadata.core.repositories")
+@EnableMongoRepositories(basePackages = {"ch.epfl.gsn.metadata.core.repositories", "ch.epfl.gsn.metadata.core.dataset"})
 @ComponentScan
 public class MongoApplicationConfig extends AbstractMongoConfiguration {
     @Override

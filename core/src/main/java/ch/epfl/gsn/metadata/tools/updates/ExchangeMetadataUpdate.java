@@ -1,15 +1,12 @@
 package ch.epfl.gsn.metadata.tools.updates;
 
-import ch.epfl.gsn.metadata.core.services.ExchangeMatadataService;
+import ch.epfl.gsn.metadata.core.services.ExchangeMetadataService;
 import ch.epfl.gsn.metadata.mongodb.MongoApplicationConfig;
-import ch.epfl.gsn.metadata.tools.taxonomy.MongoTaxonomyConfig;
-import ch.epfl.gsn.metadata.tools.taxonomy.TaxonomyLoader;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 
 import java.io.FileNotFoundException;
-import java.nio.file.FileSystem;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 
@@ -29,11 +26,11 @@ public class ExchangeMetadataUpdate {
 
         AnnotationConfigApplicationContext ctx = new AnnotationConfigApplicationContext(MongoApplicationConfig.class);
         ctx.scan("ch.epfl.gsn.metadata");
-        ExchangeMatadataService exchangeMatadataService = ctx.getBean(ExchangeMatadataService.class);
+        ExchangeMetadataService exchangeMetadataService = ctx.getBean(ExchangeMetadataService.class);
 
         Path directory = Paths.get(args[0]);
 
-        long count = exchangeMatadataService.write(directory);
+        long count = exchangeMetadataService.write(directory);
         logger.info("loaded column mappings : " + count);
     }
 }

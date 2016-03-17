@@ -8,6 +8,8 @@ import ch.epfl.osper.oai.model.OsperRecord;
 import com.google.common.collect.Maps;
 import org.apache.commons.lang.StringUtils;
 import org.apache.commons.lang3.text.StrSubstitutor;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import javax.inject.Inject;
 import javax.inject.Named;
@@ -28,6 +30,9 @@ public class DifConverter implements Converter<OsperRecord> {
 
     protected static SimpleDateFormat DATE_FORMAT = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ssZ");
 
+    protected static final Logger logger = LoggerFactory.getLogger(DifConverter.class);
+
+
     @Inject
     public DifConverter(VirtualSensorMetadataRepository metadataRepository, Properties osperConfiguration) {
         this.metadataRepository = metadataRepository;
@@ -36,6 +41,7 @@ public class DifConverter implements Converter<OsperRecord> {
 
     @Override
     public String convert(OsperRecord record) {
+        logger.info("converting to DIF " + record.getName());
         String oaiRecord = record.getXmlRecord();
         VirtualSensorMetadata metadata = metadataRepository.findOneByName(record.getName());
         Map<String, String> parameters = Maps.newHashMap();

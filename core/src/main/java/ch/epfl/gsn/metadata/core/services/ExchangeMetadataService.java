@@ -10,21 +10,20 @@ import javax.inject.Inject;
 import javax.inject.Named;
 import java.io.IOException;
 import java.nio.charset.Charset;
-import java.nio.charset.StandardCharsets;
 import java.nio.file.*;
 
 /**
  * Created by kryvych on 03/09/15.
  */
 @Named
-public class ExchangeMatadataService {
+public class ExchangeMetadataService {
 
     private ExchangeMetadataRepository repository;
 
-    protected static final Logger logger = LoggerFactory.getLogger(ExchangeMatadataService.class);
+    protected static final Logger logger = LoggerFactory.getLogger(ExchangeMetadataService.class);
 
     @Inject
-    public ExchangeMatadataService(ExchangeMetadataRepository repository) {
+    public ExchangeMetadataService(ExchangeMetadataRepository repository) {
         this.repository = repository;
     }
 
