@@ -113,7 +113,7 @@ public class SensorPageController {
 
         setResponseHeader(response);
 
-        return geoJsonConverter.convertMeasurementRecords(Lists.newArrayList(virtualSensorMetadata), false);
+        return geoJsonConverter.convertMeasurementRecords(Lists.newArrayList(virtualSensorMetadata));
     }
 
     @RequestMapping(value = "/virtualSensors", method = RequestMethod.GET, produces = "application/json")
@@ -130,7 +130,7 @@ public class SensorPageController {
 
         Set<VirtualSensorMetadata> sensorMetadataSet = Sets.newHashSet(virtualSensorMetadatas);
         logger.info("query: " + sensorQuery + " results " + sensorMetadataSet.size());
-        return geoJsonConverter.convertMeasurementRecords(sensorMetadataSet, false);
+        return geoJsonConverter.convertMeasurementRecords(sensorMetadataSet);
 
     }
 //    @RequestMapping(value = "/allSensorsTable", method = RequestMethod.GET, produces = "application/json")
@@ -172,7 +172,7 @@ public class SensorPageController {
 
         VirtualSensorMetadata sensorMetadata = sensorAccessService.getVirtualSensorMetadata(dbTableName);
 
-        String sensorMetadataJson = geoJsonConverter.convertMeasurementRecords(Lists.newArrayList(sensorMetadata), true);
+        String sensorMetadataJson = geoJsonConverter.convertMeasurementRecords(Lists.newArrayList(sensorMetadata));
 
         jsonObject.append("gsn", sensorMetadataJson);
         return jsonObject.toString();

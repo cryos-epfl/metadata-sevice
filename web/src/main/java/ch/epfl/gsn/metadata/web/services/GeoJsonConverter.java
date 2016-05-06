@@ -39,9 +39,9 @@ public class GeoJsonConverter {
         this.configuration = configuration;
     }
 
-    public String convertMeasurementRecords(Collection<VirtualSensorMetadata> records, boolean detailed) {
+    public String convertMeasurementRecords(Collection<VirtualSensorMetadata> records) {
         try (StringWriter writer = new StringWriter()) {
-            writeRecordstoJsonStream(writer, records, detailed);
+            writeRecordstoJsonStream(writer, records);
             return writer.toString();
         } catch (IOException e) {
             logger.error("Cannot write JSON! ", e);
@@ -50,29 +50,22 @@ public class GeoJsonConverter {
     }
 
 
-    protected void writeRecordstoJsonStream(StringWriter out, Collection<VirtualSensorMetadata> records, boolean detailed) throws IOException {
+    protected void writeRecordstoJsonStream(StringWriter out, Collection<VirtualSensorMetadata> records) throws IOException {
         JsonWriter writer = new JsonWriter(out);
         writer.beginObject();
         writer.name("type").value("FeatureCollection");
         writer.name("features");
         writer.beginArray();
         for (VirtualSensorMetadata record : records) {
-            writeRecord(writer, record, detailed);
+            writeRecord(writer, record);
         }
         writer.endArray();
         writer.endObject();
         writer.close();
     }
 
-//    protected void writeRecordsArray(JsonWriter writer, Collection<T> records) throws IOException {
-//        writer.beginArray();
-//        for (T record : records) {
-//            writeRecord(writer, record);
-//        }
-//        writer.endArray();
-//    }
 
-    protected void writeRecord(JsonWriter writer, VirtualSensorMetadata record, boolean detailed) throws IOException {
+    protected void writeRecord(JsonWriter writer, VirtualSensorMetadata record) throws IOException {
         if (record == null || record.getLocation() == null) {
             return;
         }
@@ -90,15 +83,7 @@ public class GeoJsonConverter {
         //Properties
         writer.beginObject();
 
-        if (detailed) {
-            writeDetailed(writer, record);
-        } else {
-            writeShort(writer, record);
-        }
-
-
-        WikiInfo wikiInfo = record.getWikiInfo();
-
+        writeShort(writer, record);
 
         writeExtra(writer, record);
 
@@ -113,6 +98,17 @@ public class GeoJsonConverter {
     protected void writeShort(JsonWriter writer, VirtualSensorMetadata record) throws IOException {
 
         writer.name("sensorName").value(record.getName());
+
+        writer.name("fromDate").value(DATE_FORMAT.format(record.getFromDate() == null ? new Date() : record.getFromDate()));
+        writer.name("toDate").value(DATE_FORMAT.format(record.getToDate() == null ? new Date() : record.getToDate()));
+
+//        writer.name("serverLink").value(record.getServer());
+        writer.name("metadataLink")
+                .value(configuration.getProperty("metadata.server") + "metadata/virtualSensors/" + record.getName());
+
+        writer.name("metadataPage")
+                .value(configuration.getProperty("metadata.page") + record.getName());
+
         WikiInfo wikiInfo = record.getWikiInfo();
         if (wikiInfo != null) {
             String organisation = wikiInfo.getOrganisation();
@@ -120,16 +116,17 @@ public class GeoJsonConverter {
                 writer.name("organisation").value(organisation);
             }
             writer.name("deployment").value(wikiInfo.getDeploymentName());
+            writer.name("organisation").value(wikiInfo.getOrganisation());
+            writer.name("e-mail").value(wikiInfo.getEmail());
         }
 
-        writer.name("fromDate").value(DATE_FORMAT.format(record.getFromDate() == null ? new Date() : record.getFromDate()));
-        writer.name("toDate").value(DATE_FORMAT.format(record.getToDate() == null ? new Date() : record.getToDate()));
+        if (record.getSensor() != null) {
+            writer.name("serialNumber").value(record.getSensor().getSerialNumber());
+        }
 
-        writer.name("serverLink").value(record.getServer());
-        writer.name("metadataLink")
-                .value(configuration.getProperty("metadata.server") + "metadata/virtualSensors/" + record.getName());
-        String dataLink = MessageFormat.format(configuration.getProperty("gsn.server.vs"), record.getName().toLowerCase());
-        writer.name("dataLink").value(dataLink);
+        if (StringUtils.isNotEmpty(record.getDescription())) {
+            writer.name("description").value(record.getDescription());
+        }
         if (wikiInfo != null) {
             writer.name("wikiLink").value(configuration.getProperty("wiki.server") + wikiInfo.getWikiLink());
         } else {
@@ -173,43 +170,6 @@ public class GeoJsonConverter {
         }
     }
 
-    protected void writeDetailed(JsonWriter writer, VirtualSensorMetadata record) throws IOException {
-
-        writer.name("sensorName").value(record.getName());
-        if (StringUtils.isNotEmpty(record.getSamplingFrequency())) {
-            writer.name("samplingFreq").value(record.getSamplingFrequency());
-        }
-        if (record.getSensor() != null) {
-            writer.name("serialNumber").value(record.getSensor().getSerialNumber());
-        }
-
-        if (StringUtils.isNotEmpty(record.getDescription())) {
-            writer.name("description").value(record.getDescription());
-        }
-
-        WikiInfo wikiInfo = record.getWikiInfo();
-        if (wikiInfo != null) {
-            writer.name("deployment").value(wikiInfo.getDeploymentName());
-            writer.name("organisation").value(wikiInfo.getOrganisation());
-            writer.name("e-mail").value(wikiInfo.getEmail());
-            writer.name("relativeCoordinates").value(wikiInfo.getRelativePosition().getPosition());
-        }
-
-//        writer.name("server").value(record.getServer());
-        writeObservedProperties(writer, record);
-
-        writeGeoData(writer, record);
-
-        writer.name("deployed").value(buildDeploymentDatesString(record.getFromDate(), record.getToDate()));
-        String dataLink = MessageFormat.format(configuration.getProperty("gsn.server.vs"), record.getName().toLowerCase());
-        writer.name("dataLink").value(dataLink);
-        if (wikiInfo != null) {
-            writer.name("wikiLink").value(configuration.getProperty("wiki.server") + wikiInfo.getWikiLink());
-        } else {
-            writer.name("wikiLink").value(record.getMetadataLink());
-        }
-
-    }
 
     private void writeObservedProperties(JsonWriter writer, VirtualSensorMetadata record) throws IOException {
 

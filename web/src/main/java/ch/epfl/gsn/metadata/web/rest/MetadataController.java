@@ -56,7 +56,7 @@ public class MetadataController {
 
         Set<VirtualSensorMetadata> sensorMetadataSet = Sets.newHashSet(virtualSensorMetadatas);
         logger.info("query: " + sensorQuery + " results " + sensorMetadataSet.size());
-        return geoJsonConverter.convertMeasurementRecords(sensorMetadataSet, false);
+        return geoJsonConverter.convertMeasurementRecords(sensorMetadataSet);
 
     }
 
@@ -69,7 +69,7 @@ public class MetadataController {
 
         addHeadersToResponce(response);
 
-        return geoJsonConverter.convertMeasurementRecords(Lists.newArrayList(virtualSensorMetadata), true);
+        return geoJsonConverter.convertMeasurementRecords(Lists.newArrayList(virtualSensorMetadata));
     }
 
     private void addHeadersToResponce(HttpServletResponse response) {

@@ -1,7 +1,7 @@
 #!/bin/bash
 
 GSN_SENSORS="url=http://montblanc.slf.ch:22002/ws/api/sensors"
-SERVER="http://montblanc.slf.ch:22001/index.html"
+SERVER="http://www.osper.ch"
 
 location=${1:-$GSN_SENSORS}
 server=${2:-$SERVER}
