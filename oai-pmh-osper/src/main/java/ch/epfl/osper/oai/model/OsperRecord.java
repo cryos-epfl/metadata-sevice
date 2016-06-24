@@ -1,12 +1,15 @@
 package ch.epfl.osper.oai.model;
 
+import ch.epfl.osper.oai.interfaces.OaiSet;
 import ch.epfl.osper.oai.interfaces.Record;
+import com.google.common.collect.Sets;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 import java.io.Serializable;
 import java.math.BigInteger;
 import java.util.Date;
+import java.util.Set;
 
 /**
  * Created by kryvych on 24/09/15.
@@ -24,6 +27,8 @@ public class OsperRecord implements Record, Serializable{
     private boolean isDeleted = false;
 
     private final String name;
+
+    private Set<OaiSet> sets = Sets.newHashSet();
 
     public OsperRecord(String name, String xmlRecord, String format, Date dateStamp) {
         this.name = name;
@@ -73,5 +78,14 @@ public class OsperRecord implements Record, Serializable{
     @Override
     public boolean isDeleted() {
         return isDeleted;
+    }
+
+    @Override
+    public Set<OaiSet> getSets() {
+        return sets;
+    }
+
+    public void addSet(OaiSet set) {
+        sets.add(set);
     }
 }

@@ -1,6 +1,7 @@
 package ch.epfl.osper.oai;
 
 import ch.epfl.gsn.metadata.mongodb.MongoApplicationConfig;
+import ch.epfl.osper.metadata.grouping.GroupingMongoApplicationConfig;
 import ch.epfl.osper.oai.impl.*;
 import ch.epfl.osper.oai.interfaces.Converter;
 import ch.epfl.osper.oai.interfaces.MetadataFormat;
@@ -20,8 +21,8 @@ import java.util.Set;
  */
 @Configuration
 @ComponentScan("ch.epfl.osper.oai")
-@EnableMongoRepositories(basePackages = "ch.epfl.osper.oai.model")
-@Import({MongoApplicationConfig.class, PropertiesConfiguration.class})
+@EnableMongoRepositories(basePackages = {"ch.epfl.osper.oai.model"})
+@Import({MongoApplicationConfig.class, PropertiesConfiguration.class, GroupingMongoApplicationConfig.class})
 public class OaiConfigurationImpl implements OaiConfiguration {
 
     @Autowired
