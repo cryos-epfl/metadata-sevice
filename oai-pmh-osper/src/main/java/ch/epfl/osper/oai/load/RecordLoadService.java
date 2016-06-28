@@ -4,6 +4,7 @@ import ch.epfl.osper.oai.OaiIdentifierBuilder;
 import ch.epfl.osper.oai.model.OaiRecordRepository;
 import ch.epfl.osper.oai.model.OsperRecord;
 import com.google.common.base.Splitter;
+import com.google.common.collect.Sets;
 import org.apache.commons.io.FilenameUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -18,6 +19,7 @@ import java.nio.file.Path;
 import java.nio.file.attribute.BasicFileAttributes;
 import java.util.Date;
 import java.util.List;
+import java.util.Set;
 import java.util.concurrent.TimeUnit;
 
 /**
@@ -40,10 +42,17 @@ public class RecordLoadService {
 
     public int write(Path directory) {
         int count = 0;
+        Set<String> recordNames = Sets.newHashSet();
 
         try (DirectoryStream<Path> stream = Files.newDirectoryStream(directory)) {
             for (Path file : stream) {
-                String fileName = FilenameUtils.removeExtension(file.getFileName().toString().toLowerCase());
+                String fileNameWithExtention = file.getFileName().toString().toLowerCase();
+                if (!"xml".equals(FilenameUtils.getExtension(fileNameWithExtention))) {
+                    logger.info("File name " + fileNameWithExtention + " is not xml!");
+                    continue;
+                }
+
+                String fileName = FilenameUtils.removeExtension(fileNameWithExtention);
 
                 List<String> nameAndType = Splitter.on("-").splitToList(fileName);
                 if(nameAndType.size() != 2) {
@@ -53,6 +62,8 @@ public class RecordLoadService {
 
                 String name = nameAndType.get(0).toLowerCase();
                 String type = nameAndType.get(1).toLowerCase();
+
+                recordNames.add(name);
 
                 String content = readFile(file, Charset.defaultCharset());
 
@@ -76,13 +87,29 @@ public class RecordLoadService {
 
                 osperRecord.setoAIIdentifier(identifierBuilder.buildId(name));
                 repository.save(osperRecord);
+
                 count++;
             }
         } catch (IOException e) {
             logger.error("Problem reading metadata file ", e);
         }
 
+        updateDeleted(recordNames);
         return count;
+    }
+
+    protected void updateDeleted(Set<String> presentRecords) {
+        int count = 0;
+        Iterable<OsperRecord> records = repository.findAll();
+        for (OsperRecord record : records) {
+            if(!presentRecords.contains(record.getName())) {
+                record.setIsDeleted(true);
+                record.setDateStamp(new Date());
+                repository.save(record);
+                count ++;
+            }
+        }
+        logger.info("Chenged status to 'deleted' for " + count + " records");
     }
 
     protected String readFile(Path path, Charset encoding)
