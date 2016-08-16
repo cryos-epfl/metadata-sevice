@@ -1,0 +1,11 @@
+{
+  "setSpec": "group:imis",
+  "setName": "IMIS",
+  "description":"this is  IMIS set",
+  "sensors": [
+    "imis_sth_1",
+    "imis_ali_1",
+    "wfj_vf_drift_flowcapt",
+    "wfj_vf_lysimeter"
+  ]
+}

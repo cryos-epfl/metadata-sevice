@@ -5,6 +5,7 @@ import ch.epfl.gsn.metadata.core.model.exchange.ExchangeMetadata;
 import ch.epfl.gsn.metadata.core.repositories.ExchangeMetadataRepository;
 import ch.epfl.gsn.metadata.core.repositories.VirtualSensorMetadataRepository;
 
+import ch.epfl.osper.metadata.grouping.OsperSetRepository;
 import ch.epfl.osper.oai.impl.DifConverter;
 import ch.epfl.osper.oai.model.OaiRecordRepository;
 import ch.epfl.osper.oai.model.OsperRecord;
@@ -28,14 +29,17 @@ public class MetadataService {
     private ExchangeMetadataRepository exchangeMetadataRepository;
 
     private final OaiRecordRepository oaiRecordRepository;
+
+    private final OsperSetRepository setRepository;
     
     private final DifConverter difConverter;
 
     @Inject
-    public MetadataService(VirtualSensorMetadataRepository sensorMetadataRepository, ExchangeMetadataRepository exchangeMetadataRepository, OaiRecordRepository oaiRecordRepository, DifConverter difConverter) {
+    public MetadataService(VirtualSensorMetadataRepository sensorMetadataRepository, ExchangeMetadataRepository exchangeMetadataRepository, OaiRecordRepository oaiRecordRepository, OsperSetRepository setRepository, DifConverter difConverter) {
         this.sensorMetadataRepository = sensorMetadataRepository;
         this.exchangeMetadataRepository = exchangeMetadataRepository;
         this.oaiRecordRepository = oaiRecordRepository;
+        this.setRepository = setRepository;
         this.difConverter = difConverter;
     }
 

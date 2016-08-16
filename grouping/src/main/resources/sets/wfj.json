@@ -1,0 +1,11 @@
+{
+  "setSpec": "group:wfj",
+  "setName": "Weissfluhjoch",
+  "description":"this is  Weissfluhjoch set",
+  "sensors": [
+    "wfj_vf_models",
+    "wfj_vf_drift_flowcapt",
+    "wfj_vf_lysimeter",
+    "wfj_vf_snow_pillow"
+  ]
+}

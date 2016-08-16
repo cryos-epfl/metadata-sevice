@@ -40,13 +40,15 @@ public class SensorPageController {
     private WebJsonConverter geoJsonConverter;
     private QueryBuilder queryBuilder;
     private MetadataService metadataService;
+    private final FilterService filterService;
 
     @Inject
-    public SensorPageController(VirtualSensorAccessService sensorAccessService, WebJsonConverter geoJsonConverter, QueryBuilder queryBuilder, MetadataService metadataService) {
+    public SensorPageController(VirtualSensorAccessService sensorAccessService, WebJsonConverter geoJsonConverter, QueryBuilder queryBuilder, MetadataService metadataService, FilterService filterService) {
         this.sensorAccessService = sensorAccessService;
         this.geoJsonConverter = geoJsonConverter;
         this.queryBuilder = queryBuilder;
         this.metadataService = metadataService;
+        this.filterService = filterService;
     }
 
     @RequestMapping(value = "/virtualSensorNames", method = RequestMethod.GET, produces = "application/json;charset=UTF-8")
@@ -114,6 +116,16 @@ public class SensorPageController {
         setResponseHeader(response);
 
         return geoJsonConverter.convertMeasurementRecords(Lists.newArrayList(virtualSensorMetadata));
+    }
+
+    @RequestMapping(value = "/filterParameters", method = RequestMethod.GET, produces = "application/json;charset=UTF-8")
+    public
+    @ResponseBody
+    String getSensorWithTableModel(HttpServletResponse response) {
+
+        setResponseHeader(response);
+
+        return filterService.buildFilterModel().getJsonString();
     }
 
     @RequestMapping(value = "/virtualSensors", method = RequestMethod.GET, produces = "application/json")
